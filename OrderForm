@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--09/25/2022------Michael Mason-->
+    <!--This webpage is used to create, update, and delete orders for the Fruit Company. -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        h3{text-align: center;}
+        
+    </style>
+    <script>
+        //Function clears the form of all input data
+        function clearform()
+        {
+            document.getElementById("myForm").reset();
+        }
+    </script>
+</head>
+<body>
+    <!--add header stating "Shipping Information"-->
+    <h3 style="font-size:30px">Shipping Information</h3>
+    <!--Create form that holds order information-->
+    <form align="center" id="myForm">
+    <!--Pre used for ease of formating-->
+    <pre>   Name: <input type="text" id="name"/>       Phone: <input type="text" id="phone"/>       Email: <input type="text" id="email"/>  
+
+Address: <input type="text" id="Address"/>        City: <input type="text" id="city"/>       State: <input type="text" id="state"/>
+
+    Zip: <input type="text" id="zip"/>    Sale Total: <input type="text" id="sale total"/>      Order Number: <input type="text" id="orderNum"/>
+        <!--Label made holds names of sales associates in a drop box-->
+        <label for="associate">Sales Associate:</label> <select name="associate" id="associate">
+        <option value="joe">Joe</option>
+        <option value="jim">Jim</option>
+        <option value="jane">Jane</option>
+        <option value="john">John</option>
+    <!--button created to submit order information and run function that clears the form and shows alert-->
+    </select> <input type="button" id="btnSubmit" value="Submit Order"/> <input type = "button" id = "btnUpdate" value = "Update"/> <input type="button" id ="btnDelete" value ="Delete"/>
+    </pre>
+    </form>
+`<!---------------------------------------------Import-------------------------------------------------->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAht-tjuq83H4_CBbzRO41Voju9jFZ2zsA",
+      authDomain: "csci324-5c05b.firebaseapp.com",
+      databaseURL: "https://csci324-5c05b-default-rtdb.firebaseio.com",
+      projectId: "csci324-5c05b",
+      storageBucket: "csci324-5c05b.appspot.com",
+      messagingSenderId: "162829346954",
+      appId: "1:162829346954:web:c8cde19e170d599d952573",
+      measurementId: "G-K67M5S1GGP"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  
+    import {getDatabase, ref, set, get, child, update, remove}
+    from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
+    const db = getDatabase();
+  
+  //-----------------------------REFERENCES-------------------------------------------------------------//
+  var name = document.getElementById("name")
+  var phone = document.getElementById("phone")
+  var email = document.getElementById("email")
+  var address = document.getElementById("Address")
+  var city =document.getElementById("city")
+  var state = document.getElementById("state")
+  var zip = document.getElementById("zip")
+  var bestfruit = document.getElementById("favorite fruit")
+  var saletotal = document.getElementById("sale total")
+  var associate = document.getElementById("associate")
+  var ordernum = document.getElementById("orderNum")
+  var btnSubmit = document.getElementById("btnSubmit")
+  var btnUpdate = document.getElementById("btnUpdate")
+  var btnDelete = document.getElementById("btnDelete")
+//-------------------------Buttons--------------------------------------------------------------------//
+btnSubmit.addEventListener("click", SubmitData)
+btnUpdate.addEventListener("click", UpdateData)
+btnDelete.addEventListener("click", DeleteData)
+//------------------------Submit Data Function--------------------------------------------------------//
+    function SubmitData(){
+        const dbref = ref(db)
+            //Sets values in field boxes to the database 
+        set(ref(db,"Orders/" + ordernum.value),{
+            Name: name.value,
+            Phone: phone.value,
+            Email: email.value,
+            Address: address.value,
+            City: city.value,
+            State: state.value,
+            Zip: zip.value,
+            BestFruit: bestfruit.value,
+            SaleTotal: saletotal.value,
+            Associate: associate.value
+        })
+        //Alerts user of successful submission and clears form
+        .then(()=>{
+            alert("Data stored succesfully");
+            clearform()
+        })
+        //Alerts user to error in submission
+        .catch((error)=>{
+            alert("unsuccesful, error"+error);
+        });
+    }
+//-------------------Update Data Function------------------------------------------------------------//
+    function UpdateData(){
+        //Updates values in data from values in field boxes
+        update(ref(db,"Orders/"+ ordernum.value),{
+            Name: name.value,
+            Phone: phone.value,
+            Email: email.value,
+            Address: address.value,
+            City: city.value,
+            State: state.value,
+            Zip: zip.value,
+            BestFruit: bestfruit.value,
+            SaleTotal: saletotal.value,
+            Associate: associate.value
+        })
+        //Alerts user of successful update
+        .then(()=>{
+            alert("Data Updated");
+            clearform()
+        })
+        //Alerts user to error
+        .catch((error)=>{
+            alert("Unsuccesful, error"+error);
+        });
+    }
+//----------------------Delete Data Function---------------------------------------------------------//
+    function DeleteData(){
+        //Deletes data using the order number given. Will delete all feilds in the table of the order number given
+        remove(ref(db,"Orders/"+ordernum.value))
+        //Alerts user to succesful deletion
+        .then(()=>{
+            alert("Data Deleted");
+        })
+        //Alerts user to error in deletion
+        .catch((error)=>{
+            alert("Unsuccessful, error"+error);
+        });
+    }
+</script> 
+</body>
+</html>
