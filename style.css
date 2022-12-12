@@ -74,8 +74,11 @@ h2 {
   font-size: xx-large;
 }
 p {
-  padding: 1em;
+  padding: 4em;
   font-size: large;
+  padding-left: 15%;
+  padding-right: 15%;
+  text-align: center;
 }
 
 .home-pic {
@@ -124,5 +127,13 @@ h3{
 }
 
 iframe {
-  padding: 1.5em
+  padding: 1.5em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.center {
+  border: 5px solid;
+  display: flex;
+  justify-content: center;
 }
